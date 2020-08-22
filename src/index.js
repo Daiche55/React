@@ -1,33 +1,52 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-class ToDoList extends React.Component {
+import { render } from '@testing-library/react';
+class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      whatToDo: [{
-        tasks: Array(3).fill(null),
-      }]
+      toDoList: [
+
+      ]
     };
   };
-  displayTasks(i) {
-    return (
-      <Task />
-    )
+
+  displayTasks() {
+
   }
+
+  submitToDo(e) {
+    e.preventDefault();
+    var title = e.target.elements['title'];
+
+    this.setState({
+      toDoList: this.state.toDoList.concat({
+        title: title.value,
+      })
+    })
+
+    title.value = "";
+  }
+
   render() {
     return (
-      <div>{this.displayTasks(1)}</div>
+      <form>
+        <input type="text" name="title" placeholde="title" />
+        <input type="submit" onSubmit={this.submitToDo}></input>
+      </form>
     )
   }
 }
-function Task(props) {
+
+function ToDo(props) {
   return (
-    <div>aa</div>
-  )
+    <div>{props.toDoList}</div>
+  );
 }
+
 // ========================================
 ReactDOM.render(
-  <ToDoList />,
+  <List />,
   document.getElementById('root')
 );
