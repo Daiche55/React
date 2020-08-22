@@ -15,10 +15,22 @@ class List extends React.Component {
   submitToDo = (e) => {
     e.preventDefault();
     const title = e.target.elements['title'].value;
+    const description = e.target.elements['description'].value;
     this.setState(
       {
-        toDoList: this.state.toDoList.concat({title: title})
+        toDoList: this.state.toDoList.concat({
+          title: title,
+          description: description,
+        })
       }
+    )
+  }
+
+  eachToDo() {
+    return (
+      this.state.toDoList.map((todo, index) => (
+        <ToDo index={index} title={todo.title} description={todo.description} />
+      ))
     )
   }
 
@@ -27,9 +39,10 @@ class List extends React.Component {
       <div>
         <form onSubmit={this.submitToDo}>
           <input type="text" name="title" placeholde="title" />
-          <input type="submit" value="Submit" ></input>
+          <input type="text" name="description" placeholde="title" />
+          <input type="submit" value="Submit"></input>
         </form>
-        <ToDo value={this.state.toDoList}/>
+        {this.eachToDo()}
       </div>
     )
   }
@@ -37,7 +50,13 @@ class List extends React.Component {
 
 function ToDo(props) {
   return (
-    <div>{props.toDoList}</div>
+    <div>
+      <h1>タスクNo. {props.index + 1}</h1>
+      <h2>今日すること:</h2><br></br>
+      {props.title}<br></br>
+      <h2>詳しい内容:</h2><br></br>
+      {props.description}<br></br>
+    </div>
   );
 }
 
