@@ -24,6 +24,8 @@ class List extends React.Component {
         })
       }
     )
+    e.target.elements['title'].value = '';
+    e.target.elements['description'].value = '';
   }
 
   eachToDo() {
