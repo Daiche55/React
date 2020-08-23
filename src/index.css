@@ -27,16 +27,18 @@ code {
   color: red;
 }
 
+.todo_done_and_not_yet_lists {
+  display: flex;
+}
+
 .todo_done_lists {
   padding: 0 2rem;
-  margin: 0 3rem;
+  margin: 0 2rem;
+  border: double;
 }
 
 .todo_not_yet_lists {
   padding: 0 2rem;
-  margin: 0 3rem;
-}
-
-.todo_done_not_yet_lists {
-  display: flex;
+  margin: 0 2rem;
+  border: double;
 }

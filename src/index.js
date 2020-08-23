@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM, { render } from 'react-dom';
+import ToDo from './ToDo';
 import './index.css';
 
 class List extends React.Component {
@@ -13,7 +14,7 @@ class List extends React.Component {
   };
 
   clearFields = (e) => {
-
+    // テスト用に一旦機能削除
   }
 
   submitToDo = (e) => {
@@ -76,6 +77,7 @@ class List extends React.Component {
               key={todo.index}
               title={todo.title}
               description={todo.description}
+              is_task_finished={todo.taskFinished}
               deleteToDo={this.deleteToDo}
               editToDo={this.editToDo}
               taskFinished={this.taskFinished}
@@ -87,15 +89,21 @@ class List extends React.Component {
   todo_done_lists() {
     return (
       this.state.toDoList.map((todo, index) => (
-        (todo.taskFinished === true ?
+        <div>
+          <p>完了タスクはありません</p>
+        {todo.taskFinished === true ?
           <ToDo index={index}
                 key={todo.index}
                 title={todo.title}
                 description={todo.description}
           />
-        :
-        <p>完了タスクはありません</p>
-        )
+          :
+          ""
+        }
+        </div>
+
+
+
       ))
     )
   }
@@ -110,7 +118,7 @@ class List extends React.Component {
             description={todo.description}
           />
           :
-          <p>未完タスクはありません</p>
+          ""
         )
       ))
     )
@@ -131,7 +139,7 @@ class List extends React.Component {
           <div className="each_todos">
             {this.eachToDo()}
           </div>
-          <div className="todo_done_not_yet_lists">
+          <div className="todo_done_and_not_yet_lists">
             <div className="todo_done_lists">
               <h3>完了タスク</h3>
               {this.todo_done_lists()}
@@ -145,59 +153,6 @@ class List extends React.Component {
       </div>
     )
   }
-}
-
-class ToDo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editToDo: false,
-    };
-  };
-
-  eachToDoEdit = () => {
-    this.setState({
-      editToDo: !this.state.editToDo
-    });
-  }
-
-  render(props) {
-    var props = this.props;
-    return (
-      <div>
-        <div className="each_todos" key={props.key}>
-          <h3>タスクNo. {props.index + 1}</h3>
-          <h3>今日すること:</h3><br></br>
-          <h2 className="todo_content">{props.title}</h2><br></br>
-          <h3>詳しい内容:</h3><br></br>
-          <h2 className="todo_content">{props.description}</h2><br></br>
-
-          <button onClick={() => props.deleteToDo(props.index)}>削除する</button>
-          {this.state.editToDo ?
-            <div>
-              <p><Form index={props.index} editToDo={props.editToDo} /></p>
-              <button onClick={this.eachToDoEdit}>戻る</button>
-            </div>
-            :
-            <button onClick={this.eachToDoEdit}>編集する</button>
-          }
-          <button onClick={() => props.taskFinished(props.index)}>タスク完了！</button>
-        </div>
-      </div>
-    );
-  }
-}
-
-function Form(props) {
-  return (
-    <div>
-      <form onSubmit={(e) => props.editToDo(e, props.index)}>
-        <input type="text" name="title" placeholde="title" />
-        <input type="text" name="description" placeholde="title" />
-        <input type="submit" value="編集する"></input>
-      </form>
-    </div>
-  )
 }
 
 // ========================================
