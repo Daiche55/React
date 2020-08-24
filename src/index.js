@@ -3,6 +3,8 @@ import ReactDOM, { render } from 'react-dom';
 import ToDo from './ToDo';
 import './index.css';
 
+var id = 0;
+
 class List extends React.Component {
   constructor(props) {
     super(props);
@@ -21,10 +23,12 @@ class List extends React.Component {
       title: e.target.elements['title'].value,
       description: e.target.elements['description'].value,
       taskFinished: false,
+      id: id,
     }
     const new_todos = [...this.state.todos, new_todo]
     this.setState({todos: new_todos})
     this.clearFields(e);
+    id++;
   }
 
   editToDo = (e, index) => {
@@ -60,30 +64,9 @@ class List extends React.Component {
     });
   };
 
-  todo_done_lists() {
-    const todos_done = this.state.todos.filter(({taskFinished}) => taskFinished)
-    return (
-      <ToDo todos={todos_done}/>
-    )
-  }
-
-  todo_not_yet_lists() {
-    return (
-      this.state.todos.map((todo, index) => (
-        (todo.taskFinished !== true ?
-          <ToDo index={index}
-            key={todo.index}
-            title={todo.title}
-            description={todo.description}
-          />
-          :
-          ""
-        )
-      ))
-    )
-  }
-
   render() {
+    const todos_done = this.state.todos.filter(({taskFinished}) => taskFinished)
+    const todos_not_yet = this.state.todos.filter(({taskFinished}) => !taskFinished)
     return (
       <div>
         <div className="todo_form">
@@ -96,25 +79,41 @@ class List extends React.Component {
         </div>
         <div className="todos">
           <div className="each_todos">
-            {this.state.todos.map((todo, index) => (
-              <ToDo index={index}
-                    key={todo.index}
-                    title={todo.title}
-                    description={todo.description}
-                    is_task_finished={todo.taskFinished}
-                    deleteToDo={this.deleteToDo}
-                    editToDo={this.editToDo}
-                    taskFinished={this.taskFinished}
-              /> ))}
+            {this.state.todos.map((todo) => (
+              <div key={todo.id}>
+                <ToDo index={todo.id}
+                      title={todo.title}
+                      description={todo.description}
+                      is_task_finished={todo.taskFinished}
+                      deleteToDo={this.deleteToDo}
+                      editToDo={this.editToDo}
+                      taskFinished={this.taskFinished}
+                />
+              </div>
+            ))}
           </div>
           <div className="todo_done_and_not_yet_lists">
             <div className="todo_done_lists">
               <h3>完了タスク</h3>
-              {this.todo_done_lists()}
+              {todos_done.map((todo) => (
+              <div key={todo.id}>
+                <ToDo index={todo.id}
+                      title={todo.title}
+                      description={todo.description}
+                />
+              </div>
+            ))}
             </div>
             <div className="todo_not_yet_lists">
               <h3>未完タスク</h3>
-              {this.todo_not_yet_lists()}
+              {todos_not_yet.map((todo) => (
+              <div key={todo.id}>
+                <ToDo index={todo.id}
+                      title={todo.title}
+                      description={todo.description}
+                />
+              </div>
+              ))}
             </div>
           </div>
         </div>
