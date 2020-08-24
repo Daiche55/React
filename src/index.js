@@ -7,9 +7,7 @@ class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      toDoList: [
-
-      ],
+      todos: [],
     };
   };
 
@@ -19,17 +17,13 @@ class List extends React.Component {
 
   submitToDo = (e) => {
     e.preventDefault();
-    const title = e.target.elements['title'].value;
-    const description = e.target.elements['description'].value;
-
-    this.setState(
-      {
-        toDoList: this.state.toDoList.concat({
-          title: title,
-          description: description,
-        })
-      }
-    )
+    const new_todo = {
+      title: e.target.elements['title'].value,
+      description: e.target.elements['description'].value,
+      taskFinished: false,
+    }
+    const new_todos = [...this.state.todos, new_todo]
+    this.setState({todos: new_todos})
     this.clearFields(e);
   }
 
@@ -37,80 +31,45 @@ class List extends React.Component {
     e.preventDefault();
     const title = e.target.elements['title'].value;
     const description = e.target.elements['description'].value;
-    const arg_index = index;
 
-    this.state.toDoList.map((todo, index) => {
-      if (index === arg_index) {
-        this.state.toDoList[index].title = title;
-        this.state.toDoList[index].description = description;
-      };
-    });
+    const something = this.state.todos.find(({todos}) => (
+      todos.index === index
+    ));
 
     this.setState({
-      toDoList: this.state.toDoList
+      todos: this.state.todos
     });
     this.clearFields(e);
   }
 
   deleteToDo = (index) => {
-    this.state.toDoList.splice(index, 1);
-    this.setState({toDoList: this.state.toDoList});
+    this.state.todos.splice(index, 1);
+    this.setState({todos: this.state.todos});
   }
 
   taskFinished = (index) => {
     const arg_index = index;
-    this.state.toDoList.map((todo, index) => {
+    this.state.todos.map((todo, index) => {
       if (index === arg_index) {
-        this.state.toDoList[index].taskFinished = !this.state.toDoList[index].taskFinished;
+        this.state.todos[index].taskFinished = !this.state.todos[index].taskFinished;
       };
     });
 
     this.setState({
-      toDoList: this.state.toDoList
+      todos: this.state.todos
     });
   };
 
-  eachToDo() {
-    return (
-      this.state.toDoList.map((todo, index) => (
-        <ToDo index={index}
-              key={todo.index}
-              title={todo.title}
-              description={todo.description}
-              is_task_finished={todo.taskFinished}
-              deleteToDo={this.deleteToDo}
-              editToDo={this.editToDo}
-              taskFinished={this.taskFinished}
-        />
-      ))
-    )
-  }
-
   todo_done_lists() {
+    const todos_done = this.state.todos.filter(({taskFinished}) => taskFinished)
     return (
-      this.state.toDoList.map((todo, index) => (
-        <div>
-          <p>完了タスクはありません</p>
-        {todo.taskFinished === true ?
-          <ToDo index={index}
-                key={todo.index}
-                title={todo.title}
-                description={todo.description}
-          />
-          :
-          ""
-        }
-        </div>
-
-
-
-      ))
+      <ToDo todos={todos_done}/>
     )
   }
 
   todo_not_yet_lists() {
     return (
-      this.state.toDoList.map((todo, index) => (
+      this.state.todos.map((todo, index) => (
         (todo.taskFinished !== true ?
           <ToDo index={index}
             key={todo.index}
@@ -137,7 +96,16 @@ class List extends React.Component {
         </div>
         <div className="todos">
           <div className="each_todos">
-            {this.eachToDo()}
+            {this.state.todos.map((todo, index) => (
+              <ToDo index={index}
+                    key={todo.index}
+                    title={todo.title}
+                    description={todo.description}
+                    is_task_finished={todo.taskFinished}
+                    deleteToDo={this.deleteToDo}
+                    editToDo={this.editToDo}
+                    taskFinished={this.taskFinished}
+              /> ))}
           </div>
           <div className="todo_done_and_not_yet_lists">
             <div className="todo_done_lists">

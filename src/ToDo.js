@@ -18,6 +18,7 @@ export default class ToDo extends React.Component {
 
   render(props) {
     var props = this.props;
+    console.log(props);
     return (
       <div>
         <div className="each_todos" key={props.key}>
@@ -40,6 +41,7 @@ export default class ToDo extends React.Component {
           <button onClick={() => props.taskFinished(props.index)}>タスク未完にする</button>
           :
           <button onClick={() => props.taskFinished(props.index)}>タスク完了にする</button>}
+          <button onClick={() => props.something()}>テスト</button>
         </div>
       </div>
     );
